@@ -1,6 +1,6 @@
 // requiring mongoose 
-let mongoose = require('mongoose'),
-    passportLocalMongoose = require('passport-local-mongoose')
+let mongoose = require('mongoose')
+    // passportLocalMongoose = require('passport-local-mongoose')
 
 // setting the mongoose debugging mode used in the terminal
 mongoose.set('debug', true)
