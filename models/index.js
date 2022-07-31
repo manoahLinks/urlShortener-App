@@ -14,3 +14,4 @@ mongoose.Promise = Promise
 // requiring and exporting the admin & link models
 module.exports.Admin = require('./admin')
 module.exports.Links = require('./links')
+module.exports.User  = require('./users')

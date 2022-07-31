@@ -3,7 +3,7 @@ let mongoose = require('mongoose')
 
 // defining the link schema
 linkSchema = new mongoose.Schema({
-    AdminId:    { type: mongoose.Schema.Types.ObjectId, ref: "Admin", required: [true]},
+    adminId:    { type: mongoose.Schema.Types.ObjectId, ref: "Admin", required: [true]},
     longUrl:    {type: String, required: [true]},
     shortUrl:   {type: String, required: [true]},
     title:      {type: String},
