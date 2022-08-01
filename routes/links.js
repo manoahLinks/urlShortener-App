@@ -7,7 +7,7 @@ let express = require('express'),
 
 //defining the index routes for getting and creating links 
 router.route('/')
-    .get(helpers.displayAllLinks)
+    .get(helpers.displayAdminLinks)
     .post(helpers.createNewLink)
 
 router.route('/:linkId')

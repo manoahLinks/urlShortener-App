@@ -23,8 +23,8 @@ exports.registerAdmin = async (req, res)=>{
     // setting user password to hashed password
     admin.password = await bcrypt.hash(admin.password, salt)
     admin.save().then((newAdmin)=>{
-        // let token = jwt.sign({newAdminId: newAdmin.id}, process.env.Secret_key)
-        res.status(201).json(newAdmin)
+        let token = jwt.sign({newAdminId: newAdmin.id}, process.env.SECRET_KEY)
+        res.status(201).json({newAdmin, token})
     })
 }
 

@@ -3,13 +3,14 @@ let db = require('../models')
 
 //creating functions to help handle the linkRoutes 
 
-exports.displayAllLinks = async (req, res)=>{
-    let allLinks = await db.Links.find({})
-        .then((allLinks)=>{
-            res.json(allLinks)
-        }).catch((err)=>{
-            res.json({message: 'error in displaying all the links'})
-        })
+exports.displayAdminLinks = async (req, res)=>{
+    let foundAdmin = await db.Admin.findById(req.params.id)
+            .then((foundAdmin)=>{
+                res.json(foundAdmin.links)
+            })
+            .catch((err)=>{
+                res.json({message: 'could not find the links for this admin'})
+            })
 }
 
 // creating a newlink function
@@ -30,18 +31,20 @@ exports.createNewLink = async (req, res)=>{
     let shortenedUrl = shortUrl(string)
 
     const adminId = req.params.id
-    
+
     // creating a newlink in the database
     let newLink = await db.Links.create({longUrl: req.body.longUrl, shortUrl: shortenedUrl, adminId: req.params.id })
         .then((newlink)=>{
+            db.Admin.findById(req.params.id).then((foundAdmin)=>{
+                foundAdmin.links.push(newlink.id)
+                foundAdmin.save().then((foundAdmin)=>{
+                    db.Links.findById(newlink._id)
+                        .populate('adminId', {email: true})
+                })
+            })
             res.json(newlink)
         })
-
-        // let foundAdmin = await db.Admin.findById(req.params.id)
-        // .then((foundAdmin)=>{
-        //     foundAdmin.links.push(newLink.id)
-        //         res.json(foundAdmin)
-        // })    
+ 
 }
 
 // show more info about a link
