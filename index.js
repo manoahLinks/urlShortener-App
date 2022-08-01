@@ -19,8 +19,8 @@ app.get('/', (req, res)=>{
     res.send('index route')
 })
 
-// redirecting a client from the shortened link to the original longUrl address
 
+// redirecting a client from the shortened link to the original longUrl address
 app.get('/:shorturl',  async(req, res)=>{
     // getting the longurl using the short url
    let foundLink =  await db.Links.findOne({shortUrl: req.params.shorturl})

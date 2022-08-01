@@ -30,7 +30,7 @@ exports.createNewLink = async (req, res)=>{
     let shortenedUrl = shortUrl(string)
 
     const adminId = req.params.id
-
+    
     // creating a newlink in the database
     let newLink = await db.Links.create({longUrl: req.body.longUrl, shortUrl: shortenedUrl, adminId: req.params.id })
         .then((newlink)=>{
