@@ -1,5 +1,4 @@
 // defining the dependencies needed
-// let passport = require('passport')
 let db = require('../models'),
         jwt = require('jsonwebtoken'),
         bcrypt = require('bcrypt'),
@@ -23,6 +22,7 @@ exports.registerAdmin = async (req, res)=>{
     // setting user password to hashed password
     admin.password = await bcrypt.hash(admin.password, salt)
     admin.save().then((newAdmin)=>{
+        // generating a token using the userId as header and payload 
         let token = jwt.sign({newAdminId: newAdmin.id}, process.env.SECRET_KEY)
         res.status(201).json({newAdmin, token})
     })

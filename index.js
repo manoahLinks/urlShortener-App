@@ -8,7 +8,7 @@ let express     = require('express'),
     linkRoute   = require('./routes/links'),
     userRoute   = require('./routes/users'),
     db          = require('./models'),
-    auth        = require('./middleware/auth')
+    auth        = require('./middleware/auth'),
     Admin       = require('./models/admin'),
     User        = require('./models/users')
     
@@ -38,12 +38,12 @@ app.get('/:shorturl',  async(req, res)=>{
         .catch((err)=>{
             res.json(err)
         })
-}
-)
+})
 
 // using the admin && link routes 
 app.use('/api/admin', adminRoute)
-// app.use('/api/user', userRoute)
+app.use('/api/user', userRoute)
+app.use('/api/user/:id/links', linkRoute)
 app.use('/api/admin/:id/links', auth.loginRequired, auth.ensureCorrectUser, linkRoute)
 
 
