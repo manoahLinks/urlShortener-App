@@ -1,8 +1,11 @@
+require('dotenv').config()
 // defining the dependencies needed
-let db = require('../models'),
-        jwt = require('jsonwebtoken'),
-        bcrypt = require('bcrypt'),
-        Admin = require('../models/admin')
+    let db              = require('../models'),
+        jwt             = require('jsonwebtoken'),
+        bcrypt          = require('bcrypt'),
+        nodemailer      = require('nodemailer'),
+        smtpTransport   = require('nodemailer-smtp-transport'),
+        Admin           = require('../models/admin')
 
 // register logic for Admin
 exports.registerAdmin = async (req, res)=>{
@@ -21,10 +24,14 @@ exports.registerAdmin = async (req, res)=>{
 
     // setting user password to hashed password
     admin.password = await bcrypt.hash(admin.password, salt)
+
+    admin.ipAddress = req.socket.remoteAddress
     admin.save().then((newAdmin)=>{
         // generating a token using the userId as header and payload 
         let token = jwt.sign({newAdminId: newAdmin.id}, process.env.SECRET_KEY)
         res.status(201).json({newAdmin, token})
+    }).catch((err)=>{
+        res.json({message: 'this email is already occupied in the database'})
     })
 }
 
@@ -67,5 +74,37 @@ exports.viewAllAdmins = async(req, res)=>{
     })
 }
 
+exports.adminPasswordRecovery = async(req, res)=>{
+    body = req.body
+
+    let foundAdmin = await Admin.findOne({email: body.email})
+        .then(async(foundAdmin)=>{
+
+            let transport = nodemailer.createTransport(smtpTransport({
+                host: 'smtp.gmail.com',
+                secure: true,
+                port: 465,
+                auth: {
+                    user: process.env.EMAIL_USERNAME,
+                    pass: process.env.EMAIL_PASSWORD
+                }
+            }))
+
+            const info = await transport.sendMail({
+                from: 'manoahluka@gmail.com',
+                to: foundAdmin.email,
+                subject: 'this is just a test with nodemailer',
+                text: 'As soon as you successfully recieve this email, then we are good to go'
+            }, (err, sent)=>{
+                if(err){
+                    res.json({message: 'sorry the mail server could not be reached at this time!!!', error: err})
+                }else{
+                    res.json(sent)
+                }
+            })
+        }).catch((err)=>{
+            res.status(400).json({message: 'the provided email does not exist in our database' })
+        })
+}
 // exporting all admin route helper functions
 module.exports = exports

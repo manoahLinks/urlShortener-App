@@ -5,5 +5,7 @@ let express = require('express'),
 router.route('/register')
     .post(helpers.registerUser)
 
+router.route('/login')
+    .post(helpers.loginUser)    
     
 module.exports = router

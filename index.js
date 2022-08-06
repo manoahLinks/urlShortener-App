@@ -33,7 +33,8 @@ app.get('/:shorturl',  async(req, res)=>{
     // updating the clicks in the database
     let updatedClick = await db.Links.findOneAndUpdate({shortUrl: foundLink.shortUrl}, {clicks: newClicks})
         .then((updatedLink)=>{
-            res.json({message: 'this is a redirected link, you are now on the original website'})
+            console.log(foundLink.longUrl)
+            res.redirect(foundLink.longUrl)
         })
         .catch((err)=>{
             res.json(err)

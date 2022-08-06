@@ -14,6 +14,9 @@ router.route('/register')
 
 router.route('/login')
     .post(helpers.loginAdmin)  
+
+router.route('/forgotpassword')
+    .post(helpers.adminPasswordRecovery)    
     
 router.route('/:id')
     .put(helpers.updateAdminProfile)    

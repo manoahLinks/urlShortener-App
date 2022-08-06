@@ -17,9 +17,6 @@ adminSchema = new mongoose.Schema({
 })
 
 
-// adding more methods and functionalities to the admin schema
-// adminSchema.plugin(passportLocalMongoose)
-
 // creating a model out of the admin schema
 let Admin = mongoose.model('Admin', adminSchema)
 
